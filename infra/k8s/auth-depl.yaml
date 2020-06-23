@@ -14,7 +14,7 @@ spec:
         spec:
             containers:
                 - name: auth
-                  image: vkolmakov/auth
+                  image: us.gcr.io/ticketing-dev-281201/auth # the format for gcloud is us.gcr.io/project_id/folder_name
 ---
 apiVersion: v1
 kind: Service
