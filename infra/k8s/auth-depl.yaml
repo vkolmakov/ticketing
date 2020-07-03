@@ -15,6 +15,12 @@ spec:
             containers:
                 - name: auth
                   image: vkolmakov/auth
+                  env:
+                      - name: JWT_KEY # name of the env variable as we want to access it
+                        valueFrom:
+                            secretKeyRef:
+                                name: jwt-secret # name of the secret
+                                key: JWT_KEY # name of the key inside of the secret
 ---
 apiVersion: v1
 kind: Service

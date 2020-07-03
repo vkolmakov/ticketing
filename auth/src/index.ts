@@ -35,6 +35,11 @@ app.use("*", () => {
 app.use(errorHandler);
 
 async function start() {
+	// Better to fail as soon as possible in case we forgot to set the environment variable
+	if (!process.env.JWT_KEY) {
+		throw new Error("JWT_KEY must be defined");
+	}
+
 	try {
 		await mongoose.connect("mongodb://auth-mongo-srv:27017/auth", {
 			useNewUrlParser: true,

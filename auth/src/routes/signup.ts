@@ -44,7 +44,7 @@ router.post(
 				id: user.id,
 				email: user.email,
 			},
-			"my_secret"
+			process.env.JWT_KEY! // as described in the auth-depl.yamp file (! is used because we know that it should exist if the app was able to start)
 		);
 
 		// Store it on the session
