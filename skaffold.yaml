@@ -16,3 +16,11 @@ build:
               manual:
                   - src: "src/**/*.ts"
                     dest: . # take whatever file changed and throw it into the same place
+        - image: vkolmakov/client
+          context: client
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: "**/*.js"
+                    dest: . # take whatever file changed and throw it into the same place
