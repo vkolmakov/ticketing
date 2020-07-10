@@ -1,4 +1,4 @@
-import axios from "axios";
+import buildClient from "../api/build-client";
 
 const LandingPage = ({ currentUser }) => {
 	console.log("In the component", currentUser);
@@ -11,28 +11,11 @@ const LandingPage = ({ currentUser }) => {
 //    from the context of the client service which is running in a container.
 // -> if executes on the client (SPA navigation) - the request can go to /, because in this
 //    case the host is already pointing to the ingress service
-LandingPage.getInitialProps = async ({ req }) => {
-	if (typeof window === "undefined") {
-		// We are on the server
-		// Ingress-nginx lives in a different k8s namespace. To make a cross-namespace k8s request
-		// the URL format is http://{service-name}.{namespace-name}.svc.cluster.local
-		const ingressUrl =
-			"http://ingress-nginx-controller.ingress-nginx.svc.cluster.local";
+LandingPage.getInitialProps = async (context) => {
+	const client = buildClient(context);
+	const { data } = await client.get("/api/users/currentuser");
 
-		const headers = req.headers; // req object will contain the headers that we passed through with the original request
-		const response = await axios.get(
-			`${ingressUrl}/api/users/currentuser`,
-			{
-				headers: headers, // the most important headers are Host (routing) and Cookies (authentication)
-			}
-		);
-		return response.data;
-	} else {
-		// We are on the client
-		// requests can be made to the base URL of ''
-		const response = await axios.get(`/api/users/currentuser`);
-		return response.data;
-	}
+	return data;
 };
 
 export default LandingPage;
