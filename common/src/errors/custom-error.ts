@@ -1,6 +1,6 @@
 // NOTE: using an abstract class because typescript will allow us to actually
 // use instanceof on this. This does not work with interfaces.
-export default abstract class CustomError extends Error {
+export abstract class CustomError extends Error {
 	abstract statusCode: number;
 
 	constructor(message: string) {
