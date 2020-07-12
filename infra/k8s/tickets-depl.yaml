@@ -16,6 +16,8 @@ spec:
                 - name: tickets
                   image: vkolmakov/tickets
                   env:
+                      - name: MONGO_URI
+                        value: "mongodb://tickets-mongo-srv:27017/tickets" # note - if connection string contains any secrets, make sure to declare it as a secret, like JWT_KEY
                       - name: JWT_KEY # name of the env variable as we want to access it
                         valueFrom:
                             secretKeyRef:
