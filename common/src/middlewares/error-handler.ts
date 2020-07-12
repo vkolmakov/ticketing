@@ -19,5 +19,7 @@ export function errorHandler(
 			.send({ errors: err.serializeErrors() });
 	}
 
+	console.error(err);
+
 	res.status(500).send(singleError(err.message));
 }
