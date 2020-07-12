@@ -10,7 +10,10 @@ const stan = nats.connect("ticketing", listenerId, {
 
 stan.on("connect", () => {
 	console.log("Listener connected to NATS");
-	const subscription = stan.subscribe("ticket:created");
+	const subscription = stan.subscribe(
+		"ticket:created",
+		"orders-service-queue-group"
+	);
 
 	subscription.on("message", (msg: Message) => {
 		// Every message has a Sequence and Data
