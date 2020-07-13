@@ -16,11 +16,15 @@ stan.on("connect", () => {
 		process.exit();
 	});
 
-	const options = stan.subscriptionOptions().setManualAckMode(true);
+	const options = stan
+		.subscriptionOptions()
+		.setManualAckMode(true)
+		.setDeliverAllAvailable() // gives us ALL of the events that ever happened before
+		.setDurableName("accounting-service"); // sets a persistent name - if we disconnect for a while and reconnect, NATS will redeliver only the missed messages. As long as the group name is set, the subscription name will be kept by NATS even if there are no more listeners left.
 
 	const subscription = stan.subscribe(
 		"ticket:created",
-		"orders-service-queue-group",
+		"queue-group-name",
 		options
 	);
 
@@ -33,7 +37,7 @@ stan.on("connect", () => {
 		if (typeof data === "string") {
 			const dataObject = JSON.parse(data);
 			console.log(
-				`Received event #${msg.getSequence()}, with data: ${dataObject}`
+				`Received event #${msg.getSequence()}, with data: ${data}`
 			);
 		}
 
