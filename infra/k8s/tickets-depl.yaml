@@ -16,6 +16,14 @@ spec:
                 - name: tickets
                   image: vkolmakov/tickets
                   env:
+                      - name: NATS_CLIENT_ID
+                        valueFrom:
+                            fieldRef:
+                                fieldPath: metadata.name # will use the pod ID as an identifier for the nats client
+                      - name: NATS_URL
+                        value: "http://nats-srv:4222"
+                      - name: NATS_CLUSTER_ID
+                        value: ticketing
                       - name: MONGO_URI
                         value: "mongodb://tickets-mongo-srv:27017/tickets" # note - if connection string contains any secrets, make sure to declare it as a secret, like JWT_KEY
                       - name: JWT_KEY # name of the env variable as we want to access it
