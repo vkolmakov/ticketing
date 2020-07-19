@@ -12,9 +12,14 @@ declare global {
 	}
 }
 
+// Will be mocked in all of the tests
+jest.mock("../nats-wrapper");
+
 let mongo: MongoMemoryServer;
 
 beforeAll(async () => {
+	jest.clearAllMocks();
+
 	process.env.JWT_KEY = "some-key";
 
 	mongo = new MongoMemoryServer();
