@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { OrderStatus } from "@tickets-vk/common";
+import { Order } from "./order";
 
 interface TicketAtts {
 	title: string;
@@ -8,6 +10,7 @@ interface TicketAtts {
 export interface TicketDoc extends mongoose.Document {
 	title: string;
 	price: number;
+	isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -31,6 +34,22 @@ const ticketSchema = new mongoose.Schema(
 
 ticketSchema.statics.build = (attrs: TicketAtts) => {
 	return new Ticket(attrs);
+};
+
+ticketSchema.methods.isReserved = async function () {
+	// has to be a `function` because we need to use `this` keyword to access the value of the document
+	const existingOrder = await Order.findOne({
+		ticket: this,
+		status: {
+			$in: [
+				OrderStatus.Created,
+				OrderStatus.AwaitingPayment,
+				OrderStatus.Complete,
+			],
+		},
+	});
+
+	return !!existingOrder;
 };
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>("Ticket", ticketSchema);
