@@ -32,3 +32,11 @@ build:
               manual:
                   - src: "src/**/*.ts"
                     dest: . # take whatever file changed and throw it into the same place
+        - image: vkolmakov/orders
+          context: orders
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: "src/**/*.ts"
+                    dest: . # take whatever file changed and throw it into the same place

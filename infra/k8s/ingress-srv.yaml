@@ -17,6 +17,10 @@ spec:
                     backend:
                         serviceName: tickets-srv
                         servicePort: 3000
+                  - path: /api/orders/?(.*)
+                    backend:
+                        serviceName: orders-srv
+                        servicePort: 3000
                   - path: /?(.*) # catch-all - as a last resort, try to get the request to the client service
                     backend:
                         serviceName: client-srv
