@@ -3,6 +3,7 @@ import { OrderStatus } from "@tickets-vk/common";
 import { Order } from "./order";
 
 interface TicketAtts {
+	id: string;
 	title: string;
 	price: number;
 }
@@ -33,7 +34,11 @@ const ticketSchema = new mongoose.Schema(
 );
 
 ticketSchema.statics.build = (attrs: TicketAtts) => {
-	return new Ticket(attrs);
+	return new Ticket({
+		_id: attrs.id, // make sure that mongo does not overwrite the ID and that it stays consistent across services
+		title: attrs.title,
+		price: attrs.price,
+	});
 };
 
 ticketSchema.methods.isReserved = async function () {
