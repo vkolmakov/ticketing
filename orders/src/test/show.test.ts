@@ -1,11 +1,13 @@
 import request from "supertest";
 import { Ticket } from "../models/ticket";
 import { app } from "../app";
+import mongoose from "mongoose";
 
 it("fetches an order", async () => {
 	const user = global.signin();
 
 	const ticket = Ticket.build({
+		id: mongoose.Types.ObjectId().toHexString(),
 		title: "concert",
 		price: 20,
 	});
@@ -30,6 +32,7 @@ it("throws a 401 if a user tries to request a ticket they don't own", async () =
 	const user = global.signin();
 
 	const ticket = Ticket.build({
+		id: mongoose.Types.ObjectId().toHexString(),
 		title: "concert",
 		price: 20,
 	});
