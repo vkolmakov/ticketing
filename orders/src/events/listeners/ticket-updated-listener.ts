@@ -13,10 +13,14 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
 			throw new Error("Ticket not found");
 		}
 
-		const { title, price } = data;
+		// Solve the issue with coupling to the version schema -
+		// we just take the exact same version that was given to us
+		// by the event and save it.
+		const { title, price, version } = data;
 		ticket.set({
 			title,
 			price,
+			version,
 		});
 
 		await ticket.save();

@@ -40,7 +40,17 @@ const ticketSchema = new mongoose.Schema(
 );
 
 ticketSchema.set("versionKey", "version");
-ticketSchema.plugin(updateIfCurrentPlugin);
+// ticketSchema.plugin(updateIfCurrentPlugin);
+
+ticketSchema.pre("save", function (done) {
+	// @ts-ignore
+	this.$where = {
+		version: this.get("version") - 1, // before saving, find the record with the same ID AND matching this condition for the version.
+		// this is the place where we will end up specifying the method of the version updates.
+	};
+
+	done();
+});
 
 ticketSchema.statics.build = (attrs: TicketAtts) => {
 	return new Ticket({
