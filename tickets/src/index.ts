@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
+import { OrderCancelledListener } from "./events/listeners/order-cancelled-listener";
 
 async function start() {
 	// Better to fail as soon as possible in case we forgot to set the environment variable
@@ -36,6 +38,9 @@ async function start() {
 
 		process.on("SIGINT", () => natsWrapper.client.close());
 		process.on("SIGTERM", () => natsWrapper.client.close());
+
+		new OrderCreatedListener(natsWrapper.client).listen();
+		new OrderCancelledListener(natsWrapper.client).listen();
 
 		console.log("Connecting to MongoDB");
 		await mongoose.connect(process.env.MONGO_URI!, {
