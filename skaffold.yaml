@@ -40,3 +40,11 @@ build:
               manual:
                   - src: "src/**/*.ts"
                     dest: . # take whatever file changed and throw it into the same place
+        - image: vkolmakov/expiration
+          context: expiration
+          docker:
+              dockerfile: Dockerfile
+          sync:
+              manual:
+                  - src: "src/**/*.ts"
+                    dest: . # take whatever file changed and throw it into the same place
