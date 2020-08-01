@@ -1,4 +1,5 @@
 import { natsWrapper } from "./nats-wrapper";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 
 async function start() {
 	if (!process.env.NATS_CLIENT_ID) {
@@ -26,6 +27,8 @@ async function start() {
 		process.on("SIGTERM", () => natsWrapper.client.close());
 
 		console.log("Connected to NATS");
+
+		new OrderCreatedListener(natsWrapper.client).listen();
 	} catch (err) {
 		console.error(err);
 	}
