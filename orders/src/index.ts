@@ -3,6 +3,7 @@ import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
 import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
 import { TicketUpdatedListener } from "./events/listeners/ticket-updated-listener";
+import { ExpirationCompleteListener } from "./events/listeners/expiration-complete-listener";
 
 async function start() {
 	// Better to fail as soon as possible in case we forgot to set the environment variable
@@ -29,10 +30,6 @@ async function start() {
 			process.env.NATS_CLIENT_ID,
 			process.env.NATS_URL
 		);
-		console.log("Connected to NATS");
-
-		new TicketCreatedListener(natsWrapper.client).listen();
-		new TicketUpdatedListener(natsWrapper.client).listen();
 
 		natsWrapper.client.on("close", () => {
 			console.log("NATS connection closed");
@@ -41,6 +38,12 @@ async function start() {
 
 		process.on("SIGINT", () => natsWrapper.client.close());
 		process.on("SIGTERM", () => natsWrapper.client.close());
+
+		console.log("Connected to NATS");
+
+		new TicketCreatedListener(natsWrapper.client).listen();
+		new TicketUpdatedListener(natsWrapper.client).listen();
+		new ExpirationCompleteListener(natsWrapper.client).listen();
 
 		console.log("Connecting to MongoDB");
 		await mongoose.connect(process.env.MONGO_URI!, {
