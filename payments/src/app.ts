@@ -3,6 +3,7 @@ import "express-async-errors"; // allows error handling inside async functions w
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError, currentUser } from "@tickets-vk/common";
+import { createChangeRouter } from "./routes/new";
 
 const app = express();
 app.set("trust proxy", true); // since we proxy the traffic through nginx ingress we need to tell express to allow that
@@ -16,6 +17,8 @@ app.use(
 
 // must be after the cookieSession since cookie contains the information
 app.use(currentUser);
+
+app.use(createChangeRouter);
 
 // 404s
 app.use("*", () => {
