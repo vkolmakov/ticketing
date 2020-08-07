@@ -9,6 +9,7 @@ import {
 } from "@tickets-vk/common";
 import { body } from "express-validator";
 import { Order } from "../models/order";
+import { stripe } from "../stripe";
 
 const router = express.Router();
 
@@ -32,7 +33,13 @@ router.post(
 			throw new BadRequestError("Cannot pay for a cancelled order");
 		}
 
-		res.send({ success: true });
+		await stripe.charges.create({
+			currency: "usd",
+			amount: order.price * 100, // convert to cents
+			source: token,
+		});
+
+		res.status(201).send({ success: true });
 	}
 );
 
