@@ -4,6 +4,7 @@ import { natsWrapper } from "./nats-wrapper";
 import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
 import { TicketUpdatedListener } from "./events/listeners/ticket-updated-listener";
 import { ExpirationCompleteListener } from "./events/listeners/expiration-complete-listener";
+import { PaymentCreatedListener } from "./events/listeners/payment-created-listener";
 
 async function start() {
 	// Better to fail as soon as possible in case we forgot to set the environment variable
@@ -44,6 +45,7 @@ async function start() {
 		new TicketCreatedListener(natsWrapper.client).listen();
 		new TicketUpdatedListener(natsWrapper.client).listen();
 		new ExpirationCompleteListener(natsWrapper.client).listen();
+		new PaymentCreatedListener(natsWrapper.client).listen();
 
 		console.log("Connecting to MongoDB");
 		await mongoose.connect(process.env.MONGO_URI!, {
