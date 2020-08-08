@@ -1,5 +1,3 @@
-import buildClient from "../api/build-client";
-
 const LandingPage = ({ currentUser }) => {
 	return currentUser ? (
 		<h1>You are signed in</h1>
@@ -15,10 +13,7 @@ const LandingPage = ({ currentUser }) => {
 // -> if executes on the client (SPA navigation) - the request can go to /, because in this
 //    case the host is already pointing to the ingress service
 LandingPage.getInitialProps = async (context) => {
-	const client = buildClient(context);
-	const { data } = await client.get("/api/users/currentuser");
-
-	return data;
+	return {};
 };
 
 export default LandingPage;
