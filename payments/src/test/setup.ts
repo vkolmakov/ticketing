@@ -17,6 +17,10 @@ jest.mock("../nats-wrapper");
 
 let mongo: MongoMemoryServer;
 
+// Outside of beforeAll for a reason - this must be set before we load any modules
+process.env.STRIPE_KEY =
+	"sk_test_51HDeyZHqKaKD6geKw016gpvqf5n5WbeJgb7RL75nFzj0hpgh94M2TPuh6hKtMkOMUDj4uGHErUxiTxkofk91zKjM00M4Q3GcBd";
+
 beforeAll(async () => {
 	process.env.JWT_KEY = "some-key";
 
