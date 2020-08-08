@@ -12,7 +12,7 @@ const LandingPage = ({ currentUser }) => {
 //    from the context of the client service which is running in a container.
 // -> if executes on the client (SPA navigation) - the request can go to /, because in this
 //    case the host is already pointing to the ingress service
-LandingPage.getInitialProps = async (context) => {
+LandingPage.getInitialProps = async (context, client, currentUser) => {
 	return {};
 };
 
