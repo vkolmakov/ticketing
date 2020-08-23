@@ -3,6 +3,7 @@ import { app } from "./app";
 
 async function start() {
 	console.log("Starting up...");
+	console.log("A test change");
 
 	// Better to fail as soon as possible in case we forgot to set the environment variable
 	if (!process.env.JWT_KEY) {
